@@ -1,14 +1,18 @@
 if (document.querySelector(".carousel")) {
-  const carouselImages = document.querySelectorAll(".carousel img");
-  let currentImageIndex = 0;
+  const carouselImg = document.querySelectorAll(".carousel img");
+  let currentImg = 0;
 
-  function showNextImage() {
-    carouselImages[currentImageIndex].classList.remove("active");
-    currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
-    carouselImages[currentImageIndex].classList.add("active");
+  function showNextImg() {
+    carouselImg[currentImg].classList.remove(
+      "active"
+    ); /* eliminamos active de la imagen actual para ocultarla */
+    currentImg =
+      (currentImg + 1) %
+      carouselImg.length; /* con el módulo nos aseguramos que al llegar a la última img, vuelva a empezar */
+    carouselImg[currentImg].classList.add("active");
   }
 
-  setInterval(showNextImage, 5000);
+  setInterval(showNextImg, 5000); /* 5 segundos */
 }
 
 const autos = [
@@ -57,7 +61,7 @@ const autos = [
     marca: "Ford",
     modelo: "Focus",
     anio: 2016,
-    precio: 149000000,
+    precio: 14900000,
     imagenes: [
       "/img/autos/ford/focus/focus1.jpg",
       "/img/autos/ford/focus/focus2.jpg",
@@ -151,6 +155,65 @@ const autos = [
       "Honda Civic Si 2012, compacto deportivo con un motor potente y un diseño dinámico. Ideal para los que buscan una conducción emocionante y un rendimiento excepcional. Equipado con características deportivas y tecnología avanzada.",
     kilometraje: 120000,
   },
+
+  {
+    id: 8,
+    marca: "Honda",
+    modelo: "HR-V",
+    anio: 2017,
+    precio: 18200000,
+    imagenes: [
+      "/img/autos/honda/hrv/hrv1.jpg",
+      "/img/autos/honda/hrv/hrv2.jpg",
+      "/img/autos/honda/hrv/hrv3.jpg",
+      "/img/autos/honda/hrv/hrv4.jpg",
+      "/img/autos/honda/hrv/hrv5.jpg",
+      "/img/autos/honda/hrv/hrv6.jpg",
+    ],
+    condicion: "usado",
+    descripcion:
+      "Honda HR-V 2017, SUV compacto con un diseño moderno y versatilidad. Perfecto para quienes buscan un vehículo ágil para la ciudad sin sacrificar espacio y confort. Equipado con tecnología avanzada y eficiencia en combustible, ideal para el día a día y escapadas de fin de semana.",
+    kilometraje: 90000,
+  },
+
+  {
+    id: 9,
+    marca: "Toyota",
+    modelo: "Corolla",
+    anio: 2022,
+    precio: 31500000,
+    imagenes: [
+      "/img/autos/toyota/corolla/corolla1.jpg",
+      "/img/autos/toyota/corolla/corolla2.jpg",
+      "/img/autos/toyota/corolla/corolla3.jpg",
+      "/img/autos/toyota/corolla/corolla4.jpg",
+      "/img/autos/toyota/corolla/corolla5.jpg",
+    ],
+    condicion: "usado",
+    descripcion:
+      "Toyota Corolla 2022, sedán elegante y eficiente con tecnología de última generación. Ideal para quienes buscan un vehículo confiable, económico y con un manejo cómodo. Equipado con avanzadas características de seguridad y un motor eficiente, perfecto tanto para viajes largos como para el uso diario en la ciudad.",
+    kilometraje: 30000,
+  },
+
+  {
+    id: 10,
+    marca: "Ford",
+    modelo: "Maverick",
+    anio: 2024,
+    precio: 48000000,
+    imagenes: [
+      "/img/autos/ford/maverick/maverick1.jpg",
+      "/img/autos/ford/maverick/maverick2.jpg",
+      "/img/autos/ford/maverick/maverick3.jpg",
+      "/img/autos/ford/maverick/maverick4.jpg",
+      "/img/autos/ford/maverick/maverick5.jpg",
+      "/img/autos/ford/maverick/maverick6.jpg",
+    ],
+    condicion: "nuevo",
+    descripcion:
+      "Ford Maverick 2024, pickup compacta y versátil con un motor híbrido eficiente. Perfecta para quienes buscan un vehículo práctico, ideal para la ciudad y con capacidad para aventuras al aire libre. Ofrece un diseño robusto, tecnología avanzada y una impresionante economía de combustible, lo que lo convierte en una opción perfecta para aquellos que necesitan funcionalidad y estilo sin comprometer el rendimiento.",
+    kilometraje: 0,
+  },
 ];
 
 function crearTarjetaAuto(auto) {
@@ -158,43 +221,47 @@ function crearTarjetaAuto(auto) {
   tarjeta.className = "car-card";
 
   const imagenesHTML = `
-        <div class="car-images">
-            <img src="${auto.imagenes[0]}" alt="${auto.marca} ${auto.modelo}" class="auto-img">
-        </div>
+      <div class="car-images">
+        <img src="${auto.imagenes[0]}" class="auto-img">
+      </div>
     `;
 
-  tarjeta.innerHTML = `
-    ${imagenesHTML}
-    <h3>${auto.marca} ${auto.modelo}</h3>
-    <p>Año: ${auto.anio}</p>
-    <p>Precio: $${auto.precio.toLocaleString()}</p>
-    <p>Kilometraje: ${auto.kilometraje.toLocaleString()} km</p>
-    <a href="/pages/auto-detalle.html?id=${
-      auto.id
-    }" class="cta-button">Más información</a>
-  `;
+  const infoHTML = `
+      <div class="car-info">
+        <h3>${auto.marca} ${auto.modelo}</h3>
+        <p>Año: ${auto.anio}</p>
+        <p>Precio: $${auto.precio.toLocaleString()}</p> 
+        <p>Kilometraje: ${auto.kilometraje.toLocaleString()} km</p>
+        <a href="/pages/auto-detalle.html?id=${
+          /* usamos el ID del auto correspondiente */
+          auto.id
+        }" class="cta-boton">Más información</a>
+      </div>
+    `; /* convertimos el precio y el km en strings locales */
+
+  tarjeta.innerHTML =
+    imagenesHTML +
+    infoHTML; /* combinamos info del auto para poder mostrarla en la tarjeta */
 
   return tarjeta;
 }
 
-const autosContainer = document.getElementById("autos-container");
-autos.forEach((auto) => {
-  const tarjeta = crearTarjetaAuto(auto);
-  //autosContainer.appendChild(tarjeta);
-});
-
-function mostrarAutosFiltrados() {
+function mostrarAutos() {
   const marca = document.getElementById("marca").value.toLowerCase();
   const modelo = document.getElementById("modelo").value.toLowerCase();
   const anio = document.getElementById("anio").value;
   const precioMin = document.getElementById("precioMin").value;
   const precioMax = document.getElementById("precioMax").value;
 
+  const condicionPagina = window.location.pathname.includes(
+    "nuevos.html"
+  ) /* verificamos la URL de la pagina */
+    ? "nuevo"
+    : "usado";
+
   const autosFiltrados = autos.filter((auto) => {
-    const condicionPagina = window.location.pathname.includes("nuevos.html")
-      ? "nuevo"
-      : "usado";
     return (
+      /* creamos un nuevo array para los autos filtrados */
       auto.condicion === condicionPagina &&
       (marca === "" || auto.marca.toLowerCase().includes(marca)) &&
       (modelo === "" || auto.modelo.toLowerCase().includes(modelo)) &&
@@ -211,33 +278,24 @@ function mostrarAutosFiltrados() {
   });
 }
 
+window.addEventListener(
+  "load",
+  mostrarAutos
+); /* esperamos que TODA la página se cargue para ejecutar la función */
+
 const aplicarFiltrosBtn = document.getElementById("aplicarFiltros");
 if (aplicarFiltrosBtn) {
-  aplicarFiltrosBtn.addEventListener("click", mostrarAutosFiltrados);
+  aplicarFiltrosBtn.addEventListener("click", mostrarAutos);
 }
 
-window.addEventListener("load", () => {
-  const carGrid = document.getElementById("carGrid");
-  if (carGrid) {
-    const condicionPagina = window.location.pathname.includes("nuevos.html")
-      ? "nuevo"
-      : "usado";
-    const autosAMostrar = autos.filter(
-      (auto) => auto.condicion === condicionPagina
-    );
-    autosAMostrar.forEach((auto) => {
-      carGrid.appendChild(crearTarjetaAuto(auto));
-    });
-  }
-
-  const featuredCars = document.getElementById("featuredCars");
-  if (featuredCars) {
-    const autosDestacados = autos.slice(0, 3); // Mostrar los primeros 3 autos como destacados
-    autosDestacados.forEach((auto) => {
-      featuredCars.appendChild(crearTarjetaAuto(auto));
-    });
-  }
-});
+const featuredCars =
+  document.getElementById("featuredCars"); /* contenedor de autos destacados */
+if (featuredCars) {
+  const autosDestacados = autos.slice(0, 5);
+  autosDestacados.forEach((auto) => {
+    featuredCars.appendChild(crearTarjetaAuto(auto));
+  });
+}
 
 const contactForm = document.getElementById("contact-form");
 if (contactForm) {
@@ -253,6 +311,7 @@ function cargarDetalleAuto() {
   const autoId = params.get("id");
 
   if (autoId) {
+    /* buscamos el auto en el array que corresponda con el ID y para compararlos pasamos los valores a string */
     const auto = autos.find((a) => a.id.toString() === autoId);
     if (auto) {
       const detalleContainer = document.getElementById("auto-detalle");
@@ -284,10 +343,7 @@ function cargarDetalleAuto() {
   }
 }
 
-// Llama a esta función cuando se carga la página
 window.addEventListener("load", () => {
-  // ... (código existente)
-
   if (window.location.pathname.includes("auto-detalle.html")) {
     cargarDetalleAuto();
   }
